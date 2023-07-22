@@ -2,11 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                git url: 'https://github.com/Pranav152/jenkins_test'
-            }
-        }
+
                 stage('Linting') {
             steps {
                 script {
