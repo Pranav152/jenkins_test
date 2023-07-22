@@ -1,2 +1,5 @@
-def add(a, b):
-    return a + b
+'''Add stuff'''
+
+# Function to add stuff
+def add(first_num, second_num):
+    return first_num + second_num
