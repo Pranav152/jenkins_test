@@ -9,7 +9,7 @@ pipeline {
                     // Run pylint and capture the output
                     def pylintOutput = sh(returnStdout: true, script: 'pylint --exit-zero .')
                     def scoreLine = pylintOutput.readLines().find { it.startsWith('Your code has been rated at') }
-
+                    echo "Pylint Score Original: ${scoreLine}"
                     // Extract the actual score from the output
                     def score = scoreLine ? scoreLine.split()[6].split('/')[0] as float : 0
                     echo "Pylint Score: ${score}"
