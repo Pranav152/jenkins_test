@@ -38,9 +38,8 @@ pipeline {
         stage('Code Coverage') {
             steps {
                 // Install code coverage tool
-                sh 'pip install coverage'
                 // Run unit tests with code coverage
-                sh 'coverage run -m unittest discover'
+                sh 'coverage run -m unittest discover tests'
                 // Generate code coverage report
                 sh 'coverage report'
             }
