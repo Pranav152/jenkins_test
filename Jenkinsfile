@@ -50,8 +50,9 @@ pipeline {
     post {
         always {
             // Collect static code analysis results with Warnings Next Generation plugin
-            step([$class: 'WarningsPublisher', 
-                  tool: [$class: 'Pylint', pattern: 'pylint-report.txt']])
+            recordIssues enabledForFailure: true, tools: [
+                [pattern: 'pylint-report.txt', parser: 'PyLint']
+            ]
         }
     }
 }
