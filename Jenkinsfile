@@ -9,6 +9,7 @@ pipeline {
                     // Run pylint and capture the output
                     sh 'pylint --exit-zero ${PWD} > pylint-report.txt || true'
                     def pylintOutput = sh(returnStdout: true, script: 'pylint --exit-zero ${PWD}')
+                    echo "Pylint Output: ${pylintOutput}"
                     def scoreLine = pylintOutput.readLines().find { it.startsWith('Your code has been rated at') }
                     echo "Pylint Score Original: ${scoreLine}"
                     // Extract the actual score from the output
@@ -49,8 +50,7 @@ pipeline {
             always {
                 // Collect static code analysis results with Warnings Next Generation plugin
                 recordIssues enabledForFailure: true, tools: [
-                    pylint(pattern: 'pylint-report.txt'),
-                    flake8(pattern: 'flake8-report.txt')
+                    pylint(pattern: 'pylint-report.txt')
                 ]
             }
         }
