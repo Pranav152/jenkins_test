@@ -7,7 +7,7 @@ pipeline {
             steps {
                 script {
                     // Run pylint and capture the output
-                    //sh 'pylint --exit-zero ${PWD} > pylint-report.txt'
+                    sh 'pylint --exit-zero ${PWD} > pylint-report.txt'
                     def pylintOutput = sh(returnStdout: true, script: 'pylint --exit-zero ${PWD}')
                     echo "Pylint Output: ${pylintOutput}"
                     def scoreLine = pylintOutput.readLines().find { it.startsWith('Your code has been rated at') }
@@ -44,6 +44,14 @@ pipeline {
                 sh 'coverage run -m unittest discover tests'
                 // Generate code coverage report
                 sh 'coverage report'
+            }
+        }
+        post {
+            always {
+                // Collect static code analysis results with Warnings Next Generation plugin
+                recordIssues enabledForFailure: true, tools: [
+                    pylint(pattern: 'pylint-report.txt')
+                ]
             }
         }
     }
