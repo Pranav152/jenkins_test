@@ -7,7 +7,7 @@ pipeline {
             steps {
                 script {
                     // Run pylint and capture the output
-                    sh 'pylint --exit-zero ${PWD} > pylint-report.txt || true'
+                    //sh 'pylint --exit-zero ${PWD} > pylint-report.txt'
                     def pylintOutput = sh(returnStdout: true, script: 'pylint --exit-zero ${PWD}')
                     echo "Pylint Output: ${pylintOutput}"
                     def scoreLine = pylintOutput.readLines().find { it.startsWith('Your code has been rated at') }
