@@ -46,13 +46,5 @@ pipeline {
                 sh 'coverage report'
             }
         }
-        post {
-            always {
-                // Collect static code analysis results with Warnings Next Generation plugin
-                recordIssues enabledForFailure: true, tools: [
-                    pylint(pattern: 'pylint-report.txt')
-                ]
-            }
-        }
     }
 }
