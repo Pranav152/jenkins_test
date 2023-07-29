@@ -51,7 +51,7 @@ pipeline {
         always {
             // Collect static code analysis results with Warnings Next Generation plugin
             recordIssues enabledForFailure: true, tools: [
-                [pattern: 'pylint-report.txt', parser: 'PyLint']
+                pyLint(pattern: 'pylint-report.txt')
             ]
         }
     }
