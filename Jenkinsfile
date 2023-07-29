@@ -2,13 +2,12 @@ pipeline {
     agent any
 
     stages {
-
-                stage('Linting') {
+        stage('Linting') {
             steps {
                 script {
                     // Run pylint and capture the output
                     sh 'pylint --exit-zero ${PWD} > pylint-report.txt'
-                    def pylintOutput = sh(returnStdout: true, script: 'pylint --exit-zero ${PWD}')
+                    def pylintOutput = readFile('pylint-report.txt')
                     echo "Pylint Output: ${pylintOutput}"
                     def scoreLine = pylintOutput.readLines().find { it.startsWith('Your code has been rated at') }
                     echo "Pylint Score Original: ${scoreLine}"
@@ -46,13 +45,14 @@ pipeline {
                 sh 'coverage report'
             }
         }
-        post {
-            always {
-                // Collect static code analysis results with Warnings Next Generation plugin
-                recordIssues enabledForFailure: true, tools: [
-                    pylint(pattern: 'pylint-report.txt')
-                ]
-            }
+    }
+
+    post {
+        always {
+            // Collect static code analysis results with Warnings Next Generation plugin
+            recordIssues enabledForFailure: true, tools: [
+                pylint(pattern: 'pylint-report.txt')
+            ]
         }
     }
 }
