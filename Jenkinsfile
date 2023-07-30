@@ -29,6 +29,9 @@ pipeline {
         stage('Run Tests and Coverage') {
             parallel { // Parallel execution of "Unit Tests" and "Code Coverage" stages
                 stage('Unit Tests') {
+                    agent {
+                        label 'main' // Use the agent labeled "main" for this stage (unit tests)
+                    }
                     steps {
                         // Install Python dependencies (if needed)
                         // sh 'pip install -r requirements.txt'
@@ -39,6 +42,9 @@ pipeline {
                 }
 
                 stage('Code Coverage') {
+                    agent {
+                        label 'secondary' // Use the agent labeled "secondary" for this stage (code coverage)
+                    }
                     steps {
                         // Install code coverage tool
                         // Run unit tests with code coverage
