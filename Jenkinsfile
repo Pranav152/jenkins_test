@@ -26,23 +26,27 @@ pipeline {
             }
         }
 
-        stage('Unit Tests') {
-            steps {
-                // Install Python dependencies (if needed)
-                // sh 'pip install -r requirements.txt'
+        stage('Run Tests and Coverage') {
+            parallel { // Parallel execution of "Unit Tests" and "Code Coverage" stages
+                stage('Unit Tests') {
+                    steps {
+                        // Install Python dependencies (if needed)
+                        // sh 'pip install -r requirements.txt'
 
-                // Run unit tests using the system's Python
-                sh 'python3 -m unittest discover'
-            }
-        }
+                        // Run unit tests using the system's Python
+                        sh 'python3 -m unittest discover'
+                    }
+                }
 
-        stage('Code Coverage') {
-            steps {
-                // Install code coverage tool
-                // Run unit tests with code coverage
-                sh 'coverage run -m unittest discover tests'
-                // Generate code coverage report
-                sh 'coverage report'
+                stage('Code Coverage') {
+                    steps {
+                        // Install code coverage tool
+                        // Run unit tests with code coverage
+                        sh 'coverage run -m unittest discover tests'
+                        // Generate code coverage report
+                        sh 'coverage report'
+                    }
+                }
             }
         }
     }
@@ -53,31 +57,6 @@ pipeline {
             recordIssues enabledForFailure: true, tools: [
                 pyLint(pattern: 'pylint-report.txt')
             ]
-        }
-    }
-
-    // Use parallel to execute the Unit Tests and Code Coverage stages in parallel
-    parallel {
-        // Run the "Unit Tests" stage
-        stage('Unit Tests') {
-            steps {
-                // Install Python dependencies (if needed)
-                // sh 'pip install -r requirements.txt'
-
-                // Run unit tests using the system's Python
-                sh 'python3 -m unittest discover'
-            }
-        }
-
-        // Run the "Code Coverage" stage
-        stage('Code Coverage') {
-            steps {
-                // Install code coverage tool
-                // Run unit tests with code coverage
-                sh 'coverage run -m unittest discover tests'
-                // Generate code coverage report
-                sh 'coverage report'
-            }
         }
     }
 }
