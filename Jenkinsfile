@@ -4,25 +4,25 @@ pipeline {
     stages {
         stage('Linting') {
             steps {
-                script {
-                    // Run pylint and capture the output
-                    sh 'pylint --exit-zero --output-format=parseable ${PWD} > pylint-report.txt'
-                    def pylintOutput = readFile('pylint-report.txt')
-                    echo "Pylint Output: ${pylintOutput}"
-                    def scoreLine = pylintOutput.readLines().find { it.startsWith('Your code has been rated at') }
-                    echo "Pylint Score Original: ${scoreLine}"
-                    // Extract the actual score from the output
-                    def score = scoreLine ? scoreLine.split()[6].split('/')[0] as float : 0
-                    echo "Pylint Score: ${score}"
+script {
+    // Run pylint and capture the output
+    sh 'pylint --exit-zero --output-format=parseable ${PWD} > pylint-report.txt'
+    def pylintOutput = readFile('pylint-report.txt')
+    echo "Pylint Output: ${pylintOutput}"
+    def scoreLine = pylintOutput.readLines().find { it.startsWith('Your code has been rated at') }
+    echo "Pylint Score Original: ${scoreLine}"
+    // Extract the actual score from the output
+    def score = scoreLine ? scoreLine.split()[6].split('/')[0] as float : 0
+    echo "Pylint Score: ${score}"
 
-                    // Check for warnings and score greater than 4
-                    if (score > 4.0) {
-                        echo "Pylint passed with a score above 4 and warnings."
-                    } else {
-                        echo "Pylint failed or returned a score of 4 or below, or no warnings were found."
-                        error("Pylint score is not above 4 or no warnings were found. Pipeline failed.")
-                    }
-                }
+    // Check for warnings and score greater than 4
+    if (score > 4.0) {
+        echo "Pylint passed with a score above 4 and warnings."
+    } else {
+        echo "Pylint failed or returned a score of 4 or below, or no warnings were found."
+        error("Pylint score is not above 4 or no warnings were found. Pipeline failed.")
+    }
+}
             }
         }
 
