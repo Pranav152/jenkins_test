@@ -26,7 +26,7 @@ script {
             }
         }
 
-       
+        stage('Run Tests and Coverage') {
             parallel { // Parallel execution of "Unit Tests" and "Code Coverage" stages
                 stage('Unit Tests') {
                     agent {
@@ -54,7 +54,7 @@ script {
                     }
                 }
             }
-        
+        }
     }
 
     post {
