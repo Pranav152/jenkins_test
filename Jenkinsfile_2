@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Run Python Script') {
+            steps {
+                script {
+                    try {
+                        // Run your Python script here
+                        sh 'python3 test.py'
+                    } catch (Exception e) {
+                        // Handle the exception
+                        echo "An error occurred: ${e.getMessage()}"
+                        // Optionally, you can fail the build
+                        currentBuild.result = 'FAILURE'
+                    }
+                }
+            }
+        }
+    }
+}
