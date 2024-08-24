@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the source code
+                checkout scm
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                // Example build step
+                sh 'echo "Building..."'
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                // Run some simple tests
+                sh 'echo "Running tests..."'
+                // Example: sh 'npm test' or './run-tests.sh'
+            }
+        }
+    }
+    
+    post {
+        always {
+            // Perform clean-up actions, etc.
+            sh 'echo "Cleaning up..."'
+        }
+        
+        success {
+            echo 'Build and tests were successful!'
+        }
+        
+        failure {
+            echo 'Build or tests failed!'
+        }
+    }
+}
